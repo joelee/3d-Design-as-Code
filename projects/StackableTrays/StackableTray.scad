@@ -3,19 +3,20 @@
 * Designed to be printed without support.
 * Version 1.0 
 *
-* See "Customisable parameters" section below to custom the organiser to your needs
+* This is a Base Module to be included by another SCAD file.
+* See the StackableTrayExample.scad for usage example.
 *
 * Source: https://github.com/joelee/3d-Design-as-Code/tree/master/projects/StackableTrays
 *
 * Recommended 3D-Printer Settings:
-*            Layer Height: 0.2mm
+*            Layer Height: 0.2mm (Change layer_height below to match your setting)
 *              Perimeters: 3
 *      Top & Bottom Layer: 3
 *                  Infill: 20%
 *
 * Author: Joseph Lee
 *         https://github.com/joelee
-*         https://www.linkedin.com/in/joeworks
+*         https://www.joeworks.com
 */
 
 /**
@@ -24,52 +25,51 @@
 */
 
 // Main block size
-block_width = 200;
-block_depth = 100;
-block_height = 50;            // Set height to < 6 to make a lid.
-block_wall_thickness = 3;
-corner_curve = 3.8;  // 16.8;
-stack_base_height = 1.5;
-
-label_text = "Customisable Box";      // Set to "" will disable text rendering.
-label_size = 12;
-label_font = "Marker Felt:style=bold";
-label_spacing = 1.0;
+//block_width = 160;
+//block_depth = 130;
+//block_height = 50;            // Set height to < 6 to make a lid.
+//block_wall_thickness = 3;
+//corner_curve = 3.8;  // 16.8;
+//stack_base_height = 1.5;
+//
+//label_text = "Custom Box";      // Set to "" will disable text rendering.
+//label_size = 12;
+//label_font = "Marker Felt:style=bold";
+//label_spacing = 1.0;
 
 /**
 * separators
 */
-separator_thickness = 1.5;    // Set to 0 to disable separators
-separators = [
+//separator_thickness = 1.5;    // Set to 0 to disable separators
+//separators = [
     // 4 element array:
     //   1. "w" or "d" for Width or Depth
     //   2. Location offset (percentage: 0 to 100). 50 is in the centre.
     //   3. Starting offset (percentage). Default to 0.
     //   4. Ending offset (percentage). Default to 100. 
-    ["w", 50, 0, 75],
-    ["d", 25, 0, 50],
-    ["d", 75, 0, 100]
+    // ["w", 50, 0, 75],
+    // ["d", 25, 0, 50],
+    // ["d", 75, 0, 100]
     // Above example will print:
-    //  |------------------------------|
-    //  |        |                     |
-    //  |------------------------------|
-    //  |                     |        |
-    //  |------------------------------|
-];
+    //            d            d
+    //   |------------------------------| 0
+    //   |        |            |        |
+    // w |----------------------        | 50
+    //   |                     |        |
+    //   |------------------------------| 100
+    //           25           75
+//    ["w", 25, 0, 100],
+//    ["w", 50, 0, 100],
+//    ["w", 75, 0, 100]    
+//];
 
 /**
 * End of Customisable parameters
 *
 * You shouldn't need to modify anything pass here...
 */
-
-
-$fn = 360;
-layer_height = 0.2;
-if (block_height <= 0) {
-    block_height = layer_height * 3;
-}
-
+//layer_height = 0.2;
+//$fn = 360;
 
 // Round edge block - support 2 different widths (round-edge rectangle)
 module round_edge_block(d, w1=0, w2=0, h=50, mr=2, drain=false) {
@@ -105,6 +105,9 @@ module make_block(w, d, h) {
 }
 
 module main_block() {
+    if ( ! layer_height ) {
+        layer_height = 0.2;
+    }
     iter_count = ((block_wall_thickness / 3) * 2) / layer_height;
     w_increment = layer_height * (3/2); 
     
@@ -151,13 +154,13 @@ module render_text() {
 }
 
 module render_width_separator(location=50, from=0, to=100) {
-    length = block_width * ((to-from)/100);
+    length = block_width * ((to-from)/100) - (block_wall_thickness * 2) + (separator_thickness);
     
     base_depth_offset = -(block_depth/2);
     base_width_offset = -(block_width/2) + (length/2);
     
     location_offset = base_depth_offset + (block_depth * (location/100));
-    offset = base_width_offset + (block_width * (from/100));
+    offset = base_width_offset + (block_width * (from/100)) + (block_wall_thickness/2);
     
     height_offset = (block_wall_thickness / 3 * 2) + stack_base_height;
     translate([offset,location_offset,(block_height/2)-height_offset])
@@ -165,13 +168,13 @@ module render_width_separator(location=50, from=0, to=100) {
 }
 
 module render_depth_separator(location=50, from=0, to=100) {
-    length = block_depth * ((to-from)/100);
+    length = block_depth * ((to-from)/100) - (block_wall_thickness * 2) + (separator_thickness);
     
     base_depth_offset = -(block_depth/2) + (length/2);
     base_width_offset = -(block_width/2);
     
     location_offset = base_width_offset + (block_width * (location/100));
-    offset = base_depth_offset + (block_depth * (from/100));
+    offset = base_depth_offset + (block_depth * (from/100)) + (block_wall_thickness/2);
     
     height_offset = (block_wall_thickness / 3 * 2) + stack_base_height;
     translate([ location_offset, offset, (block_height/2)-height_offset])
@@ -185,8 +188,8 @@ module box_block() {
         if (block_height > 5)
             translate([0,0,-1.0])
                 make_block(
-                    block_width-block_wall_thickness, 
-                    block_depth-block_wall_thickness, 
+                    block_width-(block_wall_thickness*2), 
+                    block_depth-(block_wall_thickness*2), 
                     block_height+stack_base_height
                 );
     }
@@ -203,11 +206,15 @@ module box_block() {
 }
 
 module main() {
+    if ( ! layer_height ) {
+        layer_height = 0.2;
+    }
+    if (block_height <= 0) {
+        block_height = layer_height * 3;
+    }
     difference() {
         box_block();
         if (label_text && block_height > 10) 
             render_text();
     }
 }
-
-main();
