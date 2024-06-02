@@ -26,8 +26,9 @@
 // Main block size
 block_width = 160;
 block_depth = 138;
+// Set block_height to 2 to make a cover.
 block_height = 50;            // Set height to < 6 to make a lid.
-block_wall_thickness = 1.5;
+block_wall_thickness = 3;
 corner_curve = 3.8;  // 16.8;
 stack_base_height = 1.5;
 

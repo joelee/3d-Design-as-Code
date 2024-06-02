@@ -44,12 +44,12 @@
 //separators = [
     // 4 element array:
     //   1. "w" or "d" for Width or Depth
-    //   2. Location offset (percentage: 0 to 100). 50 is in the centre.
+    //   2. Location offset (percentage: 0 to 100). 50 (default) is in the centre.
     //   3. Starting offset (percentage). Default to 0.
     //   4. Ending offset (percentage). Default to 100. 
-    // ["w", 50, 0, 75],
+    // ["w", 50],
     // ["d", 25, 0, 50],
-    // ["d", 75, 0, 100]
+    // ["d", 75]
     // Above example will print:
     //            d            d
     //   |------------------------------| 0
@@ -58,9 +58,6 @@
     //   |                     |        |
     //   |------------------------------| 100
     //           25           75
-//    ["w", 25, 0, 100],
-//    ["w", 50, 0, 100],
-//    ["w", 75, 0, 100]    
 //];
 
 /**
@@ -153,32 +150,36 @@ module render_text() {
             );
 }
 
-module render_width_separator(location=50, from=0, to=100) {
-    length = block_width * ((to-from)/100) - (block_wall_thickness * 2) + (separator_thickness);
+module render_width_separator(location=50, from=0, to=100, height=100) {
+    length = block_width * ((to-from)/100) - (block_wall_thickness * 2);
     
     base_depth_offset = -(block_depth/2);
     base_width_offset = -(block_width/2) + (length/2);
     
     location_offset = base_depth_offset + (block_depth * (location/100));
-    offset = base_width_offset + (block_width * (from/100)) + (block_wall_thickness/2);
+    offset = base_width_offset + (block_width * (from/100)) + (block_wall_thickness);
     
     height_offset = (block_wall_thickness / 3 * 2) + stack_base_height;
-    translate([offset,location_offset,(block_height/2)-height_offset])
-        cube([length, separator_thickness, block_height-height_offset], center=true);
+    separator_height = (block_height-height_offset) * (height/100);
+    
+    translate([offset,location_offset, (separator_height/2)-height_offset])
+        cube([length, separator_thickness, separator_height], center=true);
 }
 
-module render_depth_separator(location=50, from=0, to=100) {
-    length = block_depth * ((to-from)/100) - (block_wall_thickness * 2) + (separator_thickness);
+module render_depth_separator(location=50, from=0, to=100, height=100) {
+    length = block_depth * ((to-from)/100) - (block_wall_thickness * 2);
     
     base_depth_offset = -(block_depth/2) + (length/2);
     base_width_offset = -(block_width/2);
     
     location_offset = base_width_offset + (block_width * (location/100));
-    offset = base_depth_offset + (block_depth * (from/100)) + (block_wall_thickness/2);
+    offset = base_depth_offset + (block_depth * (from/100)) + (block_wall_thickness);
     
     height_offset = (block_wall_thickness / 3 * 2) + stack_base_height;
-    translate([ location_offset, offset, (block_height/2)-height_offset])
-        cube([separator_thickness, length, block_height-height_offset], center=true);
+    separator_height = (block_height-height_offset) * (height/100);
+    
+    translate([ location_offset, offset, (separator_height/2)-height_offset])
+        cube([separator_thickness, length, separator_height], center=true);
 }
 
 module box_block() {
@@ -196,10 +197,15 @@ module box_block() {
     // Render separator
     if ( separator_thickness > 0 ) {
         for ( s = separators ) {
+            c = len(s);
+            location = c > 1 ? s[1] : 50;
+            from = c > 2 ? s[2] : 0;
+            to = c > 3 ? s[3] : 100;
+            height = c > 4 ? s[4] : 100;
             if ( s[0] == "w" ) {
-                render_width_separator(s[1], s[2], s[3]);
+                render_width_separator(location, from, to, height);
             } else if ( s[0] == "d" ) {
-                render_depth_separator(s[1], s[2], s[3]);
+                render_depth_separator(location, from, to, height);
             }
         }
     }
