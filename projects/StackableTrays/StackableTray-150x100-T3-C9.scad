@@ -27,7 +27,7 @@
 block_width = 150;
 block_depth = 100;
 block_height = 50;            // Set height to < 6 to make a lid.
-block_wall_thickness = 2.8;
+block_wall_thickness = 3;
 corner_curve = 9;  // 16.8;
 stack_base_height = 1.5;
 
