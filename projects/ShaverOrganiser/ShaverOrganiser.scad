@@ -16,8 +16,8 @@
 
 // Main block size
 block_width = 160;
-block_depth = 160;
-block_height = 45;
+block_depth = 80;
+block_height = 15;
 
 
 // Custom slots
@@ -30,16 +30,44 @@ block_height = 45;
 slots = [
 //                location
 //  [Shape,   [    x,   y,  z], depth, width, width2, drain]
-    ["cyl",   [   55,  60,  0],    15,     0,      0,  true],  // Safety Shaver
-    ["cyl",   [   55, -20, 33],    38,     0,      0, false],  // Shaving Brush
-    ["rect",  [   55,  23, 33],    20,  34.5,      0,  true],  // Alum Block
-    ["cyl",   [   55, -60,  0],    38,     0,      0,  true],  // Precision Trimmer
-    ["cyl",   [ 13.8,  54,  0],    38,    33,      0,  true],  // Brio Beardscape
-    ["redge", [ 13.8,  18,  0],    28,    23,     27,  true],  // Philips OneBlade
-    ["cyl",   [ 13.8, -26,  0],    42,    38,      0,  true],  // Braun S9 Pro
-    ["rect",  [   20, -62,  0],    15,    20,      0,  true],  // Scissors
-    ["rect",  [    0, -62,  0],    10,    20,      0,  true],  // Cleaning Brush
-    ["redge", [-44.5,   0,  0],   156,  67.5,      0, false]   // Accessories/Attachments Box
+    ["cyl",   [   22,  18,  8],    40,     0,      0,  false],  // Krytox 1
+    ["cyl",   [   -22,  18,  8],    40,     0,      0,  false],  // Krytox 2
+    ["cyl",   [   -60,  -23,  0],    22,     0,      0,  false],  // Krytox 2
+    
+    ["rect",  [   61,  0,  5],    30,     66,      0,  false],  // pal 1
+    ["rect",  [   -61,  15,  5],    30,     45,      0,  false],  // pal 2
+    
+    ["cyl",   [   38,  -3,  0],    5,     0,      0,  false],  // brush 1
+    ["cyl",   [   -38,  -3,  0],    5,     0,      0,  false],  // brush 2
+    ["cyl",   [   40,  -15,  0],    5,     0,      0,  false],  // brush 3
+    ["cyl",   [   -40,  -15,  0],    5,     0,      0,  false],  // brush 4
+    ["cyl",   [   42,  -28,  0],    5,     0,      0,  false],  // brush 3
+    ["cyl",   [   -42,  -28,  0],    5,     0,      0,  false],  // brush 4
+    
+    ["rect",  [   25,  -23,  8],    20.6,     18.6,      0,  false],  // kpo 1
+    ["rect",  [   -25,  -23,  8],    20.6,     18.6,      0,  false],  // kpo 2
+    ["rect",  [   5,  -23,  0],    5,     15,      0,  false],  // kcp 1
+    ["rect",  [   -5,  -23,  0],    5,     15,      0,  false],  // kcp 2
+    
+      ["rect",  [   0,  -8,  0],    11,     3.8,      0,  false],  // tw 1
+    ["rect",  [   0,  -8,  0],    11,     3.8,      0,  false],  // tw 1
+    ["rect",  [   13.8,  -8,  0],    11,     3.8,      0,  false],  // tw 2
+    ["rect",  [   -13.8,  -8,  0],    11,     3.8,      0,  false],  // tw 2
+    ["rect",  [   28,  -8,  0],    11,     3.8,      0,  false],  // tw 2
+    ["rect",  [   -28,  -8,  0],    11,     3.8,      0,  false],  // tw 2
+    
+    
+    
+//    ["cyl",   [   55,  60,  0],    15,     0,      0,  true],  // Safety Shaver
+//    ["cyl",   [   55, -20, 33],    38,     0,      0, false],  // Shaving Brush
+//    ["rect",  [   55,  23, 33],    20,  34.5,      0,  true],  // Alum Block
+//    ["cyl",   [   55, -60,  0],    38,     0,      0,  true],  // Precision Trimmer
+//    ["cyl",   [ 13.8,  54,  0],    38,    33,      0,  true],  // Brio Beardscape
+//    ["redge", [ 13.8,  18,  0],    28,    23,     27,  true],  // Philips OneBlade
+//    ["cyl",   [ 13.8, -26,  0],    42,    38,      0,  true],  // Braun S9 Pro
+//    ["rect",  [   20, -62,  0],    15,    20,      0,  true],  // Scissors
+//    ["rect",  [    0, -62,  0],    10,    20,      0,  true],  // Cleaning Brush
+//    ["redge", [-44.5,   0,  0],   156,  67.5,      0, false]   // Accessories/Attachments Box
 ];
 
 
@@ -51,7 +79,7 @@ slots = [
 
 
 
-$fn = 100;
+$fn = 360;
 
 // Render Drainage hole
 module drain_block(diag) {
