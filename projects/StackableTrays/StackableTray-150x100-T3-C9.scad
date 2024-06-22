@@ -43,7 +43,8 @@ label_spacing = 1.0;
 separator_thickness = 1.5;    // Set to 0 to disable separators
 separators = [
     // ["w", 33],
-    ["w", 33]
+    ["w", 33],
+    ["d", 50]
 ];
 
 /**
