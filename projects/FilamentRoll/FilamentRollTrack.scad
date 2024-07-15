@@ -6,13 +6,13 @@ rail_height = 6;
 rail_gap = 3;
 
 bump_length = 15;
-bump_width = 12;
+bump_width = 11;
 
-gap1 = 62;
-gap2 = 100;
+gap1 = 59;
+gap2 = 98;
 
 
-length = gap1 + roller_width + ( 2 * rail_height );
+length = gap2 + roller_width + ( 2 * rail_height );
 
 difference() {
     cube([length, rail_width, rail_height]);

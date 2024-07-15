@@ -66,6 +66,8 @@
 * You shouldn't need to modify anything pass here...
 */
 //layer_height = 0.2;
+
+// with_support = false;
 //$fn = 360;
 
 // Round edge block - support 2 different widths (round-edge rectangle)
@@ -105,7 +107,14 @@ module main_block() {
     if ( ! layer_height ) {
         layer_height = 0.2;
     }
-    iter_count = ((block_wall_thickness / 3) * 2) / layer_height;
+    if ( ! join_variance ) {
+        join_variance = 0.3;
+    }
+    iter_count = 0;
+    if (!with_support) {
+
+    
+    }
     w_increment = layer_height * (3/2); 
     
     // Main Cube
@@ -122,20 +131,22 @@ module main_block() {
             );
     } else {    
         // Bottom curve @ 30deg so it can be printed without support    
-        for ( i = [0:iter_count] ) {
-            translate([0,0,(i*layer_height*-1)])
-                make_block(
-                    block_width-(i*0.3), 
-                    block_depth-(i*0.3), 
-                    3
-                );
+        if (iter_count > 0) {
+            for ( i = [0:iter_count] ) {
+                translate([0,0,(i*layer_height*-1)])
+                    make_block(
+                        block_width-(i*0.3), 
+                        block_depth-(i*0.3), 
+                        3
+                    );
+            }
         }
         
         // Base sized to be stackable
         translate([0,0,(iter_count*layer_height*-1)-stack_base_height])
             make_block(
-                block_width-(block_wall_thickness*1.1), 
-                block_depth-(block_wall_thickness*1.1), 
+                block_width-block_wall_thickness-(join_variance*2), 
+                block_depth-block_wall_thickness-(join_variance*2), 
                 5 + stack_base_height
             );
     }
@@ -159,7 +170,11 @@ module render_width_separator(location=50, from=0, to=100, height=100) {
     location_offset = base_depth_offset + (block_depth * (location/100));
     offset = base_width_offset + (block_width * (from/100)) + (block_wall_thickness);
     
-    height_offset = (block_wall_thickness / 3 * 2) + stack_base_height;
+    
+    height_offset = stack_base_height;
+    if (!with_support) {
+        height_offset = height_offset + (block_wall_thickness / 3 * 2);
+    }
     separator_height = (block_height-height_offset) * (height/100);
     
     translate([offset,location_offset, (separator_height/2)-height_offset])
@@ -175,7 +190,11 @@ module render_depth_separator(location=50, from=0, to=100, height=100) {
     location_offset = base_width_offset + (block_width * (location/100));
     offset = base_depth_offset + (block_depth * (from/100)) + (block_wall_thickness);
     
-    height_offset = (block_wall_thickness / 3 * 2) + stack_base_height;
+    
+    height_offset = stack_base_height;
+    if (!with_support) {
+        height_offset = height_offset + (block_wall_thickness / 3 * 2);
+    }
     separator_height = (block_height-height_offset) * (height/100);
     
     translate([ location_offset, offset, (separator_height/2)-height_offset])
@@ -183,15 +202,16 @@ module render_depth_separator(location=50, from=0, to=100, height=100) {
 }
 
 module box_block() {
+    bh = with_support ? 0 : stack_base_height;
     difference() {
         main_block();
         // Block to carve the storage space in the cube
         if (block_height > 5)
-            translate([0,0,-1.0])
+            translate([0,0,bh])
                 make_block(
                     block_width-(block_wall_thickness*2), 
                     block_depth-(block_wall_thickness*2), 
-                    block_height+stack_base_height
+                    block_height + bh
                 );
     }
     // Render separator
