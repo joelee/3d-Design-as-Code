@@ -25,23 +25,25 @@
 */
 
 // Main block size
-//block_width = 160;
-//block_depth = 130;
-//block_height = 50;            // Set height to < 6 to make a lid.
-//block_wall_thickness = 3;
-//corner_curve = 3.8;  // 16.8;
-//stack_base_height = 1.5;
+block_width = 160;
+block_depth = 130;
+block_height = 50;            // Set height to < 6 to make a lid.
+block_wall_thickness = 1.5;
+corner_curve = 3.8;  // 16.8;
+stack_base_height = 1.5;
+join_variance = 0.2; 
+
 //
-//label_text = "Custom Box";      // Set to "" will disable text rendering.
-//label_size = 12;
-//label_font = "Marker Felt:style=bold";
-//label_spacing = 1.0;
+label_text = "Custom Box";      // Set to "" will disable text rendering.
+label_size = 12;
+label_font = "Marker Felt:style=bold";
+label_spacing = 1.0;
 
 /**
 * separators
 */
-//separator_thickness = 1.5;    // Set to 0 to disable separators
-//separators = [
+separator_thickness = 1.5;    // Set to 0 to disable separators
+separators = [
     // 4 element array:
     //   1. "w" or "d" for Width or Depth
     //   2. Location offset (percentage: 0 to 100). 50 (default) is in the centre.
@@ -58,17 +60,16 @@
     //   |                     |        |
     //   |------------------------------| 100
     //           25           75
-//];
+];
+with_support = false;
 
 /**
 * End of Customisable parameters
 *
 * You shouldn't need to modify anything pass here...
 */
-//layer_height = 0.2;
-
-// with_support = false;
-//$fn = 360;
+layer_height = 0.2;
+$fn = 360;
 
 // Round edge block - support 2 different widths (round-edge rectangle)
 module round_edge_block(d, w1=0, w2=0, h=50, mr=2, drain=false) {
@@ -104,17 +105,9 @@ module make_block(w, d, h) {
 }
 
 module main_block() {
-    if ( ! layer_height ) {
-        layer_height = 0.2;
-    }
-    if ( ! join_variance ) {
-        join_variance = 0.3;
-    }
-    iter_count = 0;
-    if (!with_support) {
+    iter_count = with_support ? 0 : (((block_wall_thickness*2) / 3) * 2) / layer_height;
 
-    
-    }
+    echo("Iter Count:", iter_count);
     w_increment = layer_height * (3/2); 
     
     // Main Cube
@@ -145,8 +138,8 @@ module main_block() {
         // Base sized to be stackable
         translate([0,0,(iter_count*layer_height*-1)-stack_base_height])
             make_block(
-                block_width-block_wall_thickness-(join_variance*2), 
-                block_depth-block_wall_thickness-(join_variance*2), 
+                block_width-(block_wall_thickness*2)-(join_variance*2), 
+                block_depth-(block_wall_thickness*2)-(join_variance*2), 
                 5 + stack_base_height
             );
     }
