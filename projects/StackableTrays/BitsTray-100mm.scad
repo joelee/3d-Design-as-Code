@@ -18,7 +18,7 @@
 *         https://www.joeworks.com
 */
 
-
+include <StackableTray.scad>
 
 /**
 * Customisable parameters
@@ -29,51 +29,15 @@
 block_width = 100;
 block_depth = 100;
 block_height = 15;            // Set height to < 6 to make a lid.
-block_wall_thickness = 2;
-corner_curve = 8.8;  // 16.8;
-stack_base_height = 2;
-join_variance = 0.4;
+block_wall_thickness = 1.6;
+corner_curve = 8.8; 
 
 // Set to "" will disable text rendering.
 label_text = "Joeworks";
 label_size = 8;
-label_font = "Marker Felt:style=bold";
-label_spacing = 1.0;
 
-/**
-* separators
-*/
-separator_thickness = 1.5;    // Set to 0 to disable separators
-separators = [
-    ["d", 50, 0,  100],
-    ["w", 50, 0,  100] 
-    // 4 element array:
-    //   1. "w" or "d" for Width or Depth
-    //   2. Location offset (percentage: 0 to 100). 50 is in the centre.
-    //   3. Starting offset (percentage). Default to 0.
-    //   4. Ending offset (percentage). Default to 100. 
-    // ["w", 50, 0, 75],
-    // ["d", 25, 0, 50],
-    // ["d", 75, 0, 100]
-    // Above example will print:
-    //            d            d
-    //   |------------------------------| 0
-    //   |        |            |        |
-    // w |----------------------        | 50
-    //   |                     |        |
-    //   |------------------------------| 100
-    //           25           75  
-];
 
-/**
-* End of Customisable parameters
-*
-* You shouldn't need to modify anything pass here...
-*/
-with_support = true;
-layer_height = 0.2;
-$fn = 360;
 
-include <StackableTray.scad>
+
 
 main();

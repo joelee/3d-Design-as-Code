@@ -30,23 +30,14 @@ include <StackableTray.scad>
 block_width = 100;
 block_depth = 100;
 block_height = 15;            // Set height to < 6 to make a lid.
-block_wall_thickness = 2;
-corner_curve = 8.8;  // 16.8;
-stack_base_height = 2;
+block_wall_thickness = 1.6;
+corner_curve = 3.8;  // 16.8;
+stack_base_height = 0.6;
 join_variance = 0.2; 
 
 // Set to "" will disable text rendering.
 label_text = "Vitamins";
 label_size = 8;
-
-module env_init(text,x,y) {
-    translate([x,y,0]) rotate([180,180,0])
-        linear_extrude(2.8)
-            text(
-                text, size=38, font=label_font, 
-                spacing = label_spacing, valign="center", halign="center"
-            );
-}
 
 /**
 * separators
@@ -56,10 +47,10 @@ separators = [
     ["d", 50, 0,  100],
     ["w", 50, 0,  100] 
 ];
-with_support = false;
+stackable = 1;
 
 main();
-env_init("J", 23, -23);
-env_init("Q", -23, -23);
-env_init("H", 23, 23);
-env_init("A", -23, 23);
+engrave_text("J", 23, -23);
+engrave_text("Q", -23, -23);
+engrave_text("H", 23, 23);
+engrave_text("A", -23, 23);

@@ -32,7 +32,7 @@ corner_curve = 9;  // 16.8;
 stack_base_height = 1.5;
 
 // Set to "" will disable text rendering.
-label_text = "3D Printer Tools";      
+label_text = "Feet Tools";      
 label_size = 10;
 label_font = "Marker Felt:style=bold";
 label_spacing = 1.0;
