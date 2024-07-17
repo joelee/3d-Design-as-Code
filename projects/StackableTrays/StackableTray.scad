@@ -30,8 +30,8 @@ block_depth = 130;
 block_height = 50;            // Set height to < 6 to make a lid.
 block_wall_thickness = 1.5;
 corner_curve = 3.8;
-stack_base_height = 1.5;
-join_variance = 0.2; 
+stack_base_height = 1.6;
+join_variance = 0.3; 
 
 // Side Label
 label_text = "Custom Box";      // Set to "" will disable text rendering.
@@ -130,18 +130,18 @@ module round_edge_box_std(width,depth,height,curve=6,wall=1.6,base=1,variance=0)
     difference() {
         round_edge_block(width,depth,height,curve);
         if (wall>0) {
-            diff = wall * 2 + variance * 2;
+            diff = wall * 2 - variance * 2;
             translate([0,0,base < 0 ? 0 : base])
                 round_edge_block(width-diff,depth-diff,height,curve);
         }
     }
 }
 
-module round_edge_box_scaled(width,depth,height,curve=6,wall=2,base=1,scale=1.2,variance=0) {
+module round_edge_box_scaled(width,depth,height,curve=6,wall=2,base=1,scale=1.2,variance=0.2) {
     difference() {
         round_edge_block(width/scale,depth/scale,height,curve,scale);
         if (wall>0) {
-            diff = wall * 2 + variance * 2;
+            diff = wall * 2 - variance * 2;
             translate([0,0,base])
                 round_edge_block(width/scale-diff,depth/scale-diff,height,curve,scale);
         }
@@ -154,12 +154,12 @@ module round_edge_box_stackable(width,depth,height,curve=6,wall=1.6,base=1,varia
     c_depth = depth - variance * 2;
     
     c_size = (width > depth ? width : depth);
-    scale = c_size / (c_size - wall);
-    round_edge_box_scaled(width,depth,c_height,curve,wall,0,scale, variance);
+    scale = c_size / (c_size - base);
+    round_edge_box_scaled(width,depth,c_height,curve,wall,0,scale,variance);
     translate([0,0,c_height])
         round_edge_box_std(width,depth,height-c_height,curve,wall,0,variance);
     translate([0,0,-base]) 
-        round_edge_block(width/scale,depth/scale,base,curve);
+        round_edge_block(c_width/scale,c_depth/scale,base,curve);
 }
 
 module round_edge_box_stackable_with_support(width,depth,height,curve=6,wall=1.6,base=1,variance=0.2) {

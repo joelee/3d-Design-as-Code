@@ -32,7 +32,7 @@ block_depth = 100;
 block_height = 15;            // Set height to < 6 to make a lid.
 block_wall_thickness = 1.6;
 corner_curve = 3.8;  // 16.8;
-stack_base_height = 0.6;
+stack_base_height = 1.0;
 join_variance = 0.2; 
 
 // Set to "" will disable text rendering.
@@ -47,7 +47,7 @@ separators = [
     ["d", 50, 0,  100],
     ["w", 50, 0,  100] 
 ];
-stackable = 1;
+stackable = 0;
 
 main();
 engrave_text("J", 23, -23);

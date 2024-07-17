@@ -30,13 +30,20 @@ block_width = 100;
 block_depth = 100;
 block_height = 15;            // Set height to < 6 to make a lid.
 block_wall_thickness = 1.6;
-corner_curve = 8.8; 
+corner_curve = 6.8; 
 
 // Set to "" will disable text rendering.
 label_text = "Joeworks";
 label_size = 8;
 
-
+/**
+* separators
+*/
+separator_thickness = 1.5;    // Set to 0 to disable separators
+separators = [
+    //["d", 50, 0,  100],
+    //["w", 50, 0,  100] 
+];
 
 
 
